@@ -311,7 +311,7 @@ This cop makes sure that RBI files are always located under the defined allowed 
 
 Options:
 
-* `AllowedPaths`: A list of the paths where RBI files are allowed (default: ["rbi/**", "sorbet/rbi/**"])
+* `AllowedPaths`: A list of the paths where RBI files are allowed (default: `["rbi/**", "sorbet/rbi/**"]`)
 
 ### Examples
 
