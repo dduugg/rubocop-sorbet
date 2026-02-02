@@ -247,6 +247,42 @@ module RuboCop
             end
           RUBY
         end
+
+        def test_autocorrects_when_layout_line_length_is_disabled
+          # When Layout/LineLength is disabled, max_line_length returns nil.
+          # This should not cause a crash and should default to single-line formatting.
+          @config = RuboCop::Config.new(
+            "Sorbet/ForbidTStruct" => { "Enabled" => true, "AutoCorrect" => "always" },
+            "Layout/LineLength" => { "Enabled" => false },
+          )
+          @cop = ForbidTStruct.new(@config)
+
+          assert_offense(<<~RUBY)
+            class Foo < T::Struct
+            ^^^^^^^^^^^^^^^^^^^^^ Using `T::Struct` or its variants is deprecated in this codebase.
+              const :foo, Integer
+              prop :bar, String, default: "foo"
+            end
+          RUBY
+
+          assert_correction(<<~RUBY)
+            class Foo
+              extend T::Sig
+
+              sig { returns(Integer) }
+              attr_reader :foo
+
+              sig { returns(String) }
+              attr_accessor :bar
+
+              sig { params(foo: Integer, bar: String).void }
+              def initialize(foo:, bar: "foo")
+                @foo = foo
+                @bar = bar
+              end
+            end
+          RUBY
+        end
       end
     end
   end
