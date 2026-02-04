@@ -222,7 +222,7 @@ module RuboCop
           string = +"\n"
 
           line = "#{indent}sig { params(#{sorted_props.map(&:initialize_sig_param).join(", ")}).void }\n"
-          if line.length <= max_line_length
+          if max_line_length.nil? || line.length <= max_line_length
             string << line
           else
             string << "#{indent}sig do\n"
@@ -237,7 +237,7 @@ module RuboCop
           end
 
           line = "#{indent}def initialize(#{sorted_props.map(&:initialize_param).join(", ")})\n"
-          if line.length <= max_line_length
+          if max_line_length.nil? || line.length <= max_line_length
             string << line
           else
             string << "#{indent}def initialize(\n"
