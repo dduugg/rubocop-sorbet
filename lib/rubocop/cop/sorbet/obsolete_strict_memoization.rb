@@ -66,7 +66,7 @@ module RuboCop
               correction = "#{ivar} ||= #{t.source}.let(#{init_expr.source}, #{t.source}.nilable(#{ivar_type.source}))"
 
               # We know good places to put line breaks, if required.
-              if line_length(indent + correction) > max_line_length || correction.include?("\n")
+              if (max_line_length && line_length(indent + correction) > max_line_length) || correction.include?("\n")
                 correction = <<~RUBY.chomp
                   #{ivar} ||= #{t.source}.let(
                   #{indent}  #{init_expr.source.gsub("\n", "\n#{indent}")},

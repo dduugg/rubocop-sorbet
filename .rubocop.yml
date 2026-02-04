@@ -20,7 +20,7 @@ Naming/FileName:
   - lib/rubocop-sorbet.rb
 
 Layout/LineLength:
-  IgnoreCopDirectives: true
+  AllowCopDirectives: true
 
 InternalAffairs/UndefinedConfig:
   Enabled: false # Bug in implementation fails to find our configs
