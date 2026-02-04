@@ -1,8 +1,12 @@
 name: "rubocop-sorbet"
 
+nix: true
+
 type: "ruby"
 
 up:
+  - packages:
+    - libyaml
   - ruby
   - "bundler"
 
