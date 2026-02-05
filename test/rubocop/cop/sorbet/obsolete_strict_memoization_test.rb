@@ -180,16 +180,43 @@ module RuboCop
               end
           RUBY
         end
-      end
 
-      def test_obsolete_memoization_pattern_without_sorbet_does_not_register_offense
-        ::Bundler.stubs(:locked_gems).returns(Struct.new(:specs).new(@specs_without_sorbet))
-        assert_no_offenses(<<~RUBY)
-          def foo
-            @foo = T.let(@foo, T.nilable(Foo))
-              @foo ||= Foo.new
+        def test_obsolete_memoization_pattern_without_sorbet_does_not_register_offense
+          ::Bundler.stubs(:locked_gems).returns(Struct.new(:specs).new(@specs_without_sorbet))
+          assert_no_offenses(<<~RUBY)
+            def foo
+              @foo = T.let(@foo, T.nilable(Foo))
+                @foo ||= Foo.new
+              end
+          RUBY
+        end
+
+        def test_obsolete_memoization_pattern_autocorrects_when_layout_line_length_is_disabled
+          # When Layout/LineLength is disabled, max_line_length returns nil.
+          # This should not cause a crash and should default to single-line formatting.
+          @config = RuboCop::Config.new(
+            "Sorbet/ObsoleteStrictMemoization" => { "Enabled" => true },
+            "Layout/LineLength" => { "Enabled" => false },
+          )
+          @cop = ObsoleteStrictMemoization.new(@config)
+          @cop.stubs(:configured_indentation_width).returns(2)
+
+          msg = "This two-stage workaround for memoization in `#typed: strict` files is no longer necessary. See https://sorbet.org/docs/type-assertions#put-type-assertions-behind-memoization."
+
+          assert_offense(<<~RUBY)
+            def foobar
+              @foobar = T.let(@foobar, T.nilable(Object))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ #{msg}
+              @foobar ||= Object.new
             end
-        RUBY
+          RUBY
+
+          assert_correction(<<~RUBY)
+            def foobar
+              @foobar ||= T.let(Object.new, T.nilable(Object))
+            end
+          RUBY
+        end
       end
     end
   end
