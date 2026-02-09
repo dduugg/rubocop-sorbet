@@ -1190,6 +1190,49 @@ def initialize(a)
 end
 ```
 
+## Sorbet/RedundantTLetForLiteral
+
+Enabled by default | Safe | Supports autocorrection | VersionAdded | VersionChanged
+--- | --- | --- | --- | ---
+Enabled | Yes | Yes  | <<next>> | -
+
+Checks for redundant `T.let` declarations where the first argument
+is a simple literal (not a collection like Array or Hash) and the
+second argument is the matching class name. Sorbet can infer the types
+of simple literals automatically, so wrapping them in `T.let` is
+redundant.
+
+### Examples
+
+```ruby
+# bad
+MAX_RETRIES = T.let(3, Integer)
+GREETING = T.let("hello", String)
+RATE = T.let(1.5, Float)
+PATTERN = T.let(/foo/, Regexp)
+STATUS = T.let(:active, Symbol)
+
+# good
+MAX_RETRIES = 3
+GREETING = "hello"
+RATE = 1.5
+PATTERN = /foo/
+STATUS = :active
+
+# good — collections still need T.let
+NAMES = T.let(["alice", "bob"], T::Array[String])
+OPTIONS = T.let({ verbose: true }, T::Hash[Symbol, T::Boolean])
+
+# good — type is not the literal's own class
+value = T.let("hello", T.nilable(String))
+
+# good — instance variables need T.let for Sorbet to track their type
+@max_retries = T.let(3, Integer)
+
+# good — local variables may need T.let so Sorbet allows reassignment
+count = T.let(0, Integer)
+```
+
 ## Sorbet/Refinement
 
 Enabled by default | Safe | Supports autocorrection | VersionAdded | VersionChanged
