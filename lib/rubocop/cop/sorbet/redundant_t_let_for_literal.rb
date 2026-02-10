@@ -45,11 +45,12 @@ module RuboCop
 
         # @!method t_let_with_literal_and_class?(node)
         def_node_matcher :t_let_with_literal_and_class?, <<~PATTERN
-          (casgn _ _ (send (const nil? :T) :let $_ (const nil? $_)))
+          (casgn _ _ (send (const nil? :T) :let $literal? (const nil? $_)))
         PATTERN
 
-        # Maps AST node types to the class name Sorbet would infer.
+        # Maps AST literal node types to the class name Sorbet would infer.
         LITERAL_TYPE_TO_CLASS = {
+          dstr: :String,
           float: :Float,
           int: :Integer,
           regexp: :Regexp,

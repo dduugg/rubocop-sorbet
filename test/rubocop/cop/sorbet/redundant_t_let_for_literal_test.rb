@@ -125,6 +125,12 @@ module RuboCop
           RUBY
         end
 
+        def test_no_offense_when_widening_to_superclass
+          assert_no_offenses(<<~RUBY)
+            FOO = T.let(42, Numeric)
+          RUBY
+        end
+
         # Non-simple literals
 
         def test_no_offense_for_array_literal
@@ -175,6 +181,17 @@ module RuboCop
         def test_no_offense_for_rational_literal
           assert_no_offenses(<<~RUBY)
             VALUE = T.let(0.3r, Rational)
+          RUBY
+        end
+
+        def test_registers_offense_for_string_interpolation
+          assert_offense(<<~'RUBY')
+            FOO = T.let("#{42}", String)
+                  ^^^^^^^^^^^^^^^^^^^^^^ Sorbet/RedundantTLetForLiteral: Redundant `T.let` for String literal. Sorbet can infer this type automatically.
+          RUBY
+
+          assert_correction(<<~'RUBY')
+            FOO = "#{42}"
           RUBY
         end
 
