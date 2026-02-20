@@ -321,6 +321,15 @@ Sorbet/RedundantExtendTSig:
   Safe: false
   VersionAdded: 0.7.0
 
+Sorbet/RedundantTLetForLiteral:
+  Description: >-
+    Checks for redundant `T.let` declarations on constants where the value
+    is a simple literal whose type Sorbet can infer automatically.
+  Enabled: pending
+  Safe: true
+  SafeAutoCorrect: true
+  VersionAdded: <<next>>
+
 Sorbet/Refinement:
   Description: >-
                   Checks for the use of Ruby Refinements library. Refinements add
