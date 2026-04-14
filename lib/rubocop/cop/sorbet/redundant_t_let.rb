@@ -61,7 +61,7 @@ module RuboCop
           # When the def is wrapped by a method modifier (`private def initialize`),
           # Sorbet's initializer rewriter does not process the ivar assignments,
           # so T.let annotations remain required. Skip by returning nil.
-          return nil if method_node.parent&.send_type?
+          return if method_node.parent&.send_type?
 
           method_node.left_sibling.then { |s| signature?(s) ? s : nil }
         end
