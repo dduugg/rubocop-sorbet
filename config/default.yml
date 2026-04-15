@@ -236,6 +236,7 @@ Sorbet/ForbidTUnsafe:
 Sorbet/ForbidTUntyped:
   Description: 'Forbid usage of T.untyped'
   Enabled: false
+  AllowUntypedHashValues: false
   VersionAdded: 0.6.9
   VersionChanged: 0.7.0
 

@@ -925,6 +925,32 @@ sig { params(my_argument: String).void }
 def foo(my_argument); end
 ```
 
+#### `AllowUntypedHashValues: false` (default)
+
+```ruby
+# bad
+sig { returns(T::Hash[Symbol, T.untyped]) }
+def metadata; end
+```
+
+#### `AllowUntypedHashValues: true`
+
+```ruby
+# good (T.untyped in value position of T::Hash)
+sig { returns(T::Hash[Symbol, T.untyped]) }
+def metadata; end
+
+# bad (T.untyped in key position — still flagged)
+sig { returns(T::Hash[T.untyped, String]) }
+def metadata; end
+```
+
+### Configurable attributes
+
+Name | Default value | Configurable values
+--- | --- | ---
+AllowUntypedHashValues | `false` | Boolean
+
 ## Sorbet/ForbidTypeAliasedShapes
 
 Enabled by default | Safe | Supports autocorrection | VersionAdded | VersionChanged
