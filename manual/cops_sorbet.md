@@ -909,7 +909,7 @@ foo
 
 Enabled by default | Safe | Supports autocorrection | VersionAdded | VersionChanged
 --- | --- | --- | --- | ---
-Disabled | Yes | No | 0.6.9 | 0.7.0
+Disabled | Yes | No | 0.6.9 | <<next>>
 
 Disallows using `T.untyped` anywhere.
 
@@ -924,23 +924,21 @@ def foo(my_argument); end
 sig { params(my_argument: String).void }
 def foo(my_argument); end
 ```
-
-#### `AllowUntypedHashValues: false` (default)
+#### AllowUntypedHashValues: false (default)
 
 ```ruby
 # bad
 sig { returns(T::Hash[Symbol, T.untyped]) }
 def metadata; end
 ```
-
-#### `AllowUntypedHashValues: true`
+#### AllowUntypedHashValues: true
 
 ```ruby
 # good (T.untyped in value position of T::Hash)
 sig { returns(T::Hash[Symbol, T.untyped]) }
 def metadata; end
 
-# bad (T.untyped in key position — still flagged)
+# bad (T.untyped in key position of T::Hash — still flagged)
 sig { returns(T::Hash[T.untyped, String]) }
 def metadata; end
 ```
