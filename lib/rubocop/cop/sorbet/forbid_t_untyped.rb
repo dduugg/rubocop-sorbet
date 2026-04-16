@@ -59,7 +59,7 @@ module RuboCop
         def hash_value_position?(node)
           parent = node.parent
           parent&.send_type? &&
-            parent.method_name == :[] &&
+            parent.method?(:[]) &&
             t_hash_receiver?(parent.receiver) &&
             parent.arguments[1].equal?(node)
         end
