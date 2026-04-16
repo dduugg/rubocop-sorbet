@@ -238,7 +238,7 @@ Sorbet/ForbidTUntyped:
   Enabled: false
   AllowUntypedHashValues: false
   VersionAdded: 0.6.9
-  VersionChanged: 0.7.0
+  VersionChanged: '<<next>>'
 
 Sorbet/ForbidTypeAliasedShapes:
   Description: 'Forbids defining type aliases that contain shapes'
